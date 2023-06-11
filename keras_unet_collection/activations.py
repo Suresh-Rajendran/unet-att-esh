@@ -13,6 +13,44 @@ def snake_(X, beta):
 def esh_(X):
     return X * K.tanh(K.sigmoid(X))
 
+class Mish(Layer):
+    '''
+    Mish Activation Function.
+    
+    Mish is a smooth, non-monotonic function that can improve the 
+    performance of deep learning models.
+    
+    Y = Mish()(X)
+    
+    Mish: A Self Regularized Non-Monotonic Activation Function
+    Diganta Misra
+    
+    Usage: use it as a tf.keras.Layer
+    '''
+    def __init__(self, trainable=False, **kwargs):
+        super(Mish, self).__init__(**kwargs)
+        self.supports_masking = True
+        self.trainable = trainable
+
+    def build(self, input_shape):
+        super(Mish, self).build(input_shape)
+
+    def call(self, inputs, mask=None):
+        return self.mish_(inputs)
+
+    def get_config(self):
+        config = {'trainable': self.trainable}
+        base_config = super(Mish, self).get_config()
+        return dict(list(base_config.items()) + list(config.items()))
+
+    def compute_output_shape(self, input_shape):
+        return input_shape
+
+    @staticmethod
+    def mish_(inputs):
+        return inputs * K.tanh(K.softplus(inputs))
+
+
 class Esh(Layer):
     '''
     Esh Activation Function.
