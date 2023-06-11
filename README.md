@@ -5,7 +5,7 @@
 This project makes use of code from the following open-source repositories:
 
 1. **[keras_unet_collection](https://github.com/yingkaisha/keras-unet-collection)** by [yingkaisha]
-   The code from this repository was instrumental in testing the novel Esh, Mish, Swish activation function with various U-Net architectures in our project. This played a crucial role in the progress and success of our work. 
+   The code from this repository was instrumental in testing the novel Esh, Mish activation function with various U-Net architectures in our project. This played a crucial role in the progress and success of our work. 
 
 
 ## Citation
