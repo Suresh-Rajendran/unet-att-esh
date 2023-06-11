@@ -13,6 +13,41 @@ def snake_(X, beta):
 def esh_(X):
     return X * K.tanh(K.sigmoid(X))
 
+class Swish(Layer):
+    '''
+    Swish Activation Function.
+    
+    Swish is a smooth, self-gated activation function discovered by researchers at Google.
+    
+    Y = Swish()(X)
+    
+    Ramachandran, P., Zoph, B. and Le, Q.V., 2017. Searching for activation functions. arXiv preprint arXiv:1710.05941.
+    
+    Usage: use it as a tf.keras.Layer
+    '''
+    def __init__(self, trainable=False, **kwargs):
+        super(Swish, self).__init__(**kwargs)
+        self.supports_masking = True
+        self.trainable = trainable
+
+    def build(self, input_shape):
+        super(Swish, self).build(input_shape)
+
+    def call(self, inputs, mask=None):
+        return self.swish_(inputs)
+
+    def get_config(self):
+        config = {'trainable': self.trainable}
+        base_config = super(Swish, self).get_config()
+        return dict(list(base_config.items()) + list(config.items()))
+
+    def compute_output_shape(self, input_shape):
+        return input_shape
+
+    @staticmethod
+    def swish_(inputs):
+        return inputs * K.sigmoid(inputs)
+
 class Mish(Layer):
     '''
     Mish Activation Function.
