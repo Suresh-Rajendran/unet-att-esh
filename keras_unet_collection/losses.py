@@ -424,6 +424,45 @@ def iou_seg(y_true, y_pred, dtype=tf.float32):
     
     return 1-tf.math.divide_no_nan(area_intersect, area_union)
 
+def iou_seg_score(y_true, y_pred, dtype=tf.float32):
+    """
+    Inersection over Union (IoU) loss for segmentation maps. 
+    
+    iou_seg(y_true, y_pred, dtype=tf.float32)
+    
+    ----------
+    Rahman, M.A. and Wang, Y., 2016, December. Optimizing intersection-over-union in deep neural networks for 
+    image segmentation. In International symposium on visual computing (pp. 234-244). Springer, Cham.
+    
+    ----------
+    Input
+        y_true: segmentation targets, c.f. `keras.losses.categorical_crossentropy`
+        y_pred: segmentation predictions.
+        
+        dtype: the data type of input tensors.
+               Default is tf.float32.
+        
+    """
+
+    # tf tensor casting
+    y_pred = tf.convert_to_tensor(y_pred)
+    y_pred = tf.cast(y_pred, dtype)
+    y_true = tf.cast(y_true, y_pred.dtype)
+
+    y_pred = tf.squeeze(y_pred)
+    y_true = tf.squeeze(y_true)
+    
+    y_true_pos = tf.reshape(y_true, [-1])
+    y_pred_pos = tf.reshape(y_pred, [-1])
+
+    area_intersect = tf.reduce_sum(tf.multiply(y_true_pos, y_pred_pos))
+    
+    area_true = tf.reduce_sum(y_true_pos)
+    area_pred = tf.reduce_sum(y_pred_pos)
+    area_union = area_true + area_pred - area_intersect
+    
+    return tf.math.divide_no_nan(area_intersect, area_union)
+
 # ========================= #
 # Semi-hard triplet
 
